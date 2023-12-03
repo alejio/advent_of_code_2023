@@ -69,7 +69,7 @@ def calculate_minimum_set_of_cubes(game: Game) -> dict:
     return {"reds": reds, "blues": blues, "greens": greens}
 
 
-def main_day_2(input_file: str) -> int:
+def main_day_2(input_file: str) -> tuple[int, int]:
     games = load_and_parse_games(input_file)
     sum_of_valid_game_ids = 0
     sum_of_minimum_set_powers = 0
