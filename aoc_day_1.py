@@ -1,9 +1,10 @@
-import re
+import regex as re
 
 
 def txt_loader(file_path: str) -> list:
     with open(file_path) as f:
         return f.readlines()
+
 
 mapper = {
     "zero": 0,
@@ -20,21 +21,15 @@ mapper = {
 number_strings = list(mapper.keys())
 
 
-def replace_number_strings_with_digits(input_string: str) -> str:
-    matches = re.findall(r"(?=("+'|'.join(number_strings)+r"))", input_string)
-    if len(matches) == 0:
-        return input_string
-    elif len(matches) == 1:
-        return input_string.replace(matches[0], str(mapper[matches[0]]))
+def extract_digits(input_string: str,
+                   include_number_strings: bool = False) -> list:
+    if include_number_strings is False:
+        return [int(i) for i in input_string if i.isdigit()]
     else:
-        if len(set(matches)) == 1:
-            return input_string.replace(matches[0], str(mapper[matches[0]]))
-        else:
-            return input_string.replace(matches[0], str(mapper[matches[0]])).replace(matches[-1], str(mapper[matches[-1]]))
-
-
-def extract_digits(input_string: str) -> list:
-    return [int(i) for i in input_string if i.isdigit()]
+        pattern = r'(?:zero|one|two|three|four|five|six|seven|eight|nine|\d)'
+        matches = re.findall(pattern, input_string, overlapped=True)
+        matches = [int(mapper[i]) if i in mapper.keys() else int(i) for i in matches]
+        return matches
 
 
 def combine_first_and_last_digits_in_list(input_list: list) -> int:
@@ -42,18 +37,16 @@ def combine_first_and_last_digits_in_list(input_list: list) -> int:
 
 
 def main_day_1(file_path: str,
-               replace_number_strings: bool=False) -> int:
+               include_number_strings: bool = False) -> int:
     lines_list = txt_loader(file_path)
     total_sum = 0
     for line in lines_list:
-        if replace_number_strings:
-            line = replace_number_strings_with_digits(line)
-        digits_list = extract_digits(line)
+        digits_list = extract_digits(line, include_number_strings=include_number_strings)
         total_sum += combine_first_and_last_digits_in_list(digits_list)
     return total_sum
 
 
 if __name__ == '__main__':
     print(main_day_1("data/input.txt"))
-    print(main_day_1("data/input.txt", replace_number_strings=True))
+    print(main_day_1("data/input.txt", include_number_strings=True))
 
