@@ -1,4 +1,4 @@
-from aoc_day_2 import main_day_2, load_and_parse_games, check_game_is_valid
+from aoc_day_2 import main_day_2, load_and_parse_games, check_game_is_valid, calculate_power_of_set_of_cubes
 
 
 def test_load_and_parse_games():
@@ -18,6 +18,9 @@ def test_check_game_is_valid():
     assert check_game_is_valid(games[2], 12, 14, 13) is False
     assert check_game_is_valid(games[3], 12, 14, 13) is False
 
+
+def test_calculate_power_of_set_of_cubes():
+    calculate_power_of_set_of_cubes(4, 2, 6) == 48
 
 def test_main_day_2():
     assert main_day_2("fixtures/test_fixture_day_2.txt") == 8

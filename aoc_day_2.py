@@ -58,13 +58,29 @@ def check_game_is_valid(game: Game, constraint_red: int, constraint_blue: int, c
         return False
 
 
+def calculate_power_of_set_of_cubes(n_reds: int, n_blues: int, n_greens: int) -> int:
+    return n_reds * n_blues * n_greens
+
+
+def calculate_minimum_set_of_cubes(game: Game) -> dict:
+    reds = game.max_of_reds()
+    blues = game.max_of_blues()
+    greens = game.max_of_greens()
+    return {"reds": reds, "blues": blues, "greens": greens}
+
+
 def main_day_2(input_file: str) -> int:
     games = load_and_parse_games(input_file)
     sum_of_valid_game_ids = 0
+    sum_of_minimum_set_powers = 0
     for game in games:
         if check_game_is_valid(game, 12, 14, 13):
             sum_of_valid_game_ids += game.game_number
-    return sum_of_valid_game_ids
+        minimum_set = calculate_minimum_set_of_cubes(game)
+        sum_of_minimum_set_powers += calculate_power_of_set_of_cubes(n_reds=minimum_set["reds"],
+                                        n_blues=minimum_set["blues"],
+                                        n_greens=minimum_set["greens"])
+    return sum_of_valid_game_ids, sum_of_minimum_set_powers
 
 
 if __name__ == "__main__":
