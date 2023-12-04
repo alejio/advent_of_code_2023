@@ -16,6 +16,11 @@ class SymbolCoordinates:
     column: int
 
 
+def load_input_file(input_file: str) -> list[str]:
+    with open(input_file, "r") as file:
+        return [line.strip() for line in file.readlines()]
+
+
 def find_number_position_range_within_string(row_number: int, row_content: str) -> list[NumberCoordinates]:
     number_matches = re.finditer(r"\d+", row_content)
     return [NumberCoordinates(int(number_match.group(0)),
@@ -39,7 +44,20 @@ def is_number_valid(number: NumberCoordinates, symbol: SymbolCoordinates) -> boo
 
 
 def main_day_3(input_file: str) -> int:
-    return 0
+    data = load_input_file(input_file)
+    number_coordinates = []
+    symbol_coordinates = []
+    for row in range(len(data)):
+        number_coordinates += find_number_position_range_within_string(row, data[row])
+        symbol_coordinates += find_symbol_position_within_string(row, data[row])
+    sum_of_valid_numbers = 0
+    for nc in number_coordinates:
+        for sc in symbol_coordinates:
+            if is_number_valid(nc, sc):
+                sum_of_valid_numbers += nc.number
+                break
+    return sum_of_valid_numbers
+
 
 if __name__ == "__main__":
-    main_day_3("data/input_day_3.txt")
+    print(main_day_3("data/input_day_3.txt"))
