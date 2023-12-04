@@ -31,4 +31,4 @@ def test_is_number_valid():
     assert is_number_valid(number_2, symbol) is False
 
 def test_main_day_3():
-    assert main_day_3("fixtures/test_input_part_3.txt") == 4361
+    assert main_day_3("fixtures/test_fixture_day_3.txt") == (4361, 467835)

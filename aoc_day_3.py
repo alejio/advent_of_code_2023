@@ -43,7 +43,24 @@ def is_number_valid(number: NumberCoordinates, symbol: SymbolCoordinates) -> boo
     return on_same_row_flag and overlapping_columns_flag
 
 
-def main_day_3(input_file: str) -> int:
+def get_gear_numbers(symbol: SymbolCoordinates, list_of_valid_numbers) -> list:
+    gear_count = 0
+    adjacent_numbers = []
+    for number in list_of_valid_numbers:
+        if is_number_valid(number, symbol):
+            gear_count += 1
+            adjacent_numbers.append(number.number)
+    if gear_count == 2:
+        return adjacent_numbers
+    else:
+        return [0, 0]
+
+
+def calculate_gear_ratio(adjacent_numbers: list) -> int:
+    return adjacent_numbers[0] * adjacent_numbers[1]
+
+
+def main_day_3(input_file: str) -> tuple[int]:
     data = load_input_file(input_file)
     number_coordinates = []
     symbol_coordinates = []
@@ -51,12 +68,18 @@ def main_day_3(input_file: str) -> int:
         number_coordinates += find_number_position_range_within_string(row, data[row])
         symbol_coordinates += find_symbol_position_within_string(row, data[row])
     sum_of_valid_numbers = 0
+    valid_numbers = []
     for nc in number_coordinates:
         for sc in symbol_coordinates:
             if is_number_valid(nc, sc):
                 sum_of_valid_numbers += nc.number
+                valid_numbers.append(nc)
                 break
-    return sum_of_valid_numbers
+    sum_of_gear_ratios = 0
+    for sc in symbol_coordinates:
+        gear_numbers = get_gear_numbers(sc, valid_numbers)
+        sum_of_gear_ratios += calculate_gear_ratio(gear_numbers)
+    return sum_of_valid_numbers, sum_of_gear_ratios
 
 
 if __name__ == "__main__":
