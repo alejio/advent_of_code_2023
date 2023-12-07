@@ -19,7 +19,7 @@ class Scratchcard:
 def load_and_parse_txt_lines(filename: str) -> list[str]:
     with open(filename, "r") as f:
         list_of_lines = f.readlines()
-        list_of_lines = [re.sub(r"Card \d+: ", "", line) for line in list_of_lines]
+        list_of_lines = [re.sub(r"Card\s+\d+: ", "", line) for line in list_of_lines]
         list_of_lines = [' '.join(line.split()) for line in list_of_lines]
         list_of_lines = [line.split("|") for line in list_of_lines]
         list_of_scratchcards = [Scratchcard(list(map(int, line[0].split())),
@@ -33,3 +33,7 @@ def main_day_4(input_file: str) -> int:
     for scratchcard in list_of_scratchcards:
         total_count += scratchcard.calculate_points_per_game()
     return total_count
+
+
+if __name__ == "__main__":
+    print(main_day_4("data/input_day_4.txt"))
