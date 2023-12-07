@@ -30,9 +30,13 @@ def load_and_parse_txt_lines(filename: str) -> list[str]:
 def main_day_4(input_file: str) -> int:
     list_of_scratchcards = load_and_parse_txt_lines(input_file)
     total_count = 0
-    for scratchcard in list_of_scratchcards:
+    total_cards = [1] * len(list_of_scratchcards)
+    for idx, scratchcard in enumerate(list_of_scratchcards):
+        number_of_matches = scratchcard.count_set_of_drawn_numbers_that_were_winning()
         total_count += scratchcard.calculate_points_per_game()
-    return total_count
+        for n in range(number_of_matches):
+            total_cards[idx + n + 1] += total_cards[idx]
+    return total_count, sum(total_cards)
 
 
 if __name__ == "__main__":
